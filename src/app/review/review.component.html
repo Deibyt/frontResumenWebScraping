@@ -1,0 +1,76 @@
+<nav>
+  <button class="btn btn-primary" (click)="loadAllReviews()">Todas las opiniones</button>
+  <div>
+    <label style="font-weight: bold;" for="brandSelect">Marca del vehículo&nbsp;&nbsp;</label>
+    <select id="brandSelect" [(ngModel)]="selectedBrand" (change)="onBrandChange()">
+      <option value="">Selecciona una marca</option>
+      <option *ngFor="let brand of brands" [value]="brand">{{brand}}</option>
+    </select>
+  </div>
+  <div>
+    <label  style="font-weight: bold;" for="brandSelect">Informacion disponible&nbsp;&nbsp;</label>
+    <select [(ngModel)]="selectedOption" (change)="onOptionChange()">
+      <option value="">Selecciona una opción</option>
+      <option value="data">Data de la marca</option>
+      <option value="positive">Opiniones positivas</option>
+      <option value="negative">Opiniones negativas</option>
+    </select>
+  </div>
+</nav>
+
+<div class="content" [class.blur-background]="isLoading">
+  <div *ngIf="showTable" class="table-responsive">
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Modelo</th>
+              <th>Calificación</th>
+              <th>Marca</th>
+              <th>Referencia</th>
+              <th>Autor</th>
+              <th>País</th>
+              <th>Fecha</th>
+              <th>Opinion Positiva</th>
+              <th>Opinion Negativa</th>
+              <th>Opinion Sin Definir</th>
+            </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let review of reviews">
+            <td>{{ review.id }}</td>
+            <td>{{ review.modelo }}</td>
+            <td>{{ review.calificacion }}</td>
+            <td>{{ review.marca }}</td>
+            <td>{{ review.referencia }}</td>
+            <td>{{ review.autor }}</td>
+            <td>{{ review.pais }}</td>
+            <td>{{ review.fecha }}</td>
+            <td>{{ review.opinion_positiva }}</td>
+            <td>{{ review.opinion_negativa }}</td>
+            <td>{{ review.opinion_sin_definir }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <div *ngIf="summary" class="summary-container">
+    <h2>{{ summary.referencia }}</h2>
+    <p><strong>Promedio de calificaciones:</strong> {{ summary.promedio_calificaciones }}</p>
+    <div class="image-container">
+      <img *ngIf="selectedBrand" [src]="getImageForBrand(selectedBrand)" [alt]="selectedBrand">
+    </div>
+    <p><strong>Resumen de opiniones:</strong></p>
+    <p>{{ summary.resumen_opiniones }}</p>
+  </div>
+
+</div>
+
+<div *ngIf="isLoading" class="loading-overlay">
+  <div class="loading-content">
+    <div class="spinner"></div>
+    <p>Por favor espera, la IA está generando el resumen. Puede tardar un momento...</p>
+  </div>
+</div>
